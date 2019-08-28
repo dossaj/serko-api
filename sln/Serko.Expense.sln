@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29209.62
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serko.Expense.Server", "..\src\Serko.Expense.Server\Serko.Expense.Server.csproj", "{CCD99C40-BFC6-4A52-800A-0DEAAB1DBE67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serko.Expense.Castle", "..\src\Serko.Expense.Castle\Serko.Expense.Castle.csproj", "{F20E35B5-2434-4EB2-ADA2-3BB3ECA84D07}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CCD99C40-BFC6-4A52-800A-0DEAAB1DBE67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCD99C40-BFC6-4A52-800A-0DEAAB1DBE67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCD99C40-BFC6-4A52-800A-0DEAAB1DBE67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCD99C40-BFC6-4A52-800A-0DEAAB1DBE67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F20E35B5-2434-4EB2-ADA2-3BB3ECA84D07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F20E35B5-2434-4EB2-ADA2-3BB3ECA84D07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F20E35B5-2434-4EB2-ADA2-3BB3ECA84D07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F20E35B5-2434-4EB2-ADA2-3BB3ECA84D07}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {73E1FC32-529D-4F8B-98E8-B818EA9CE9FE}
+	EndGlobalSection
+EndGlobal
