@@ -73,7 +73,7 @@ namespace Serko.Expense.Server
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMiddleware<ScopeMiddleware>();
+            app.UseMiddleware<TransactionMiddleware>();
 
             app.UseOpenApi();
             app.UseReDoc();
