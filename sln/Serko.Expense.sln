@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serko.Expense.Server", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serko.Expense.Castle", "..\src\Serko.Expense.Castle\Serko.Expense.Castle.csproj", "{F20E35B5-2434-4EB2-ADA2-3BB3ECA84D07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serko.Expense.Core", "..\src\Serko.Expense.Core\Serko.Expense.Core.csproj", "{380FA705-A7EA-4BD6-B16F-7CE4C606F23B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serko.Expense.Core", "..\src\Serko.Expense.Core\Serko.Expense.Core.csproj", "{380FA705-A7EA-4BD6-B16F-7CE4C606F23B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
