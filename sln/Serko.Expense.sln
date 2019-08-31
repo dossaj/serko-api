@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serko.Expense.Castle", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serko.Expense.Core", "..\src\Serko.Expense.Core\Serko.Expense.Core.csproj", "{380FA705-A7EA-4BD6-B16F-7CE4C606F23B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serko.Expense.Domain", "..\src\Serko.Expense.Domain\Serko.Expense.Domain.csproj", "{3E3EA623-02DA-47FA-94F8-F2312A2AF7A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{380FA705-A7EA-4BD6-B16F-7CE4C606F23B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{380FA705-A7EA-4BD6-B16F-7CE4C606F23B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{380FA705-A7EA-4BD6-B16F-7CE4C606F23B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E3EA623-02DA-47FA-94F8-F2312A2AF7A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E3EA623-02DA-47FA-94F8-F2312A2AF7A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E3EA623-02DA-47FA-94F8-F2312A2AF7A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E3EA623-02DA-47FA-94F8-F2312A2AF7A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
