@@ -1,6 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using System.IO;
+using System.Net.Mail;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Serko.Expense.Server.Formatters
 {
