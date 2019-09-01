@@ -6,6 +6,7 @@ using Castle.MicroKernel.Context;
 using Castle.MicroKernel.Facilities;
 using Castle.MicroKernel.ModelBuilder;
 using Castle.MicroKernel.Registration;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
@@ -80,6 +81,7 @@ namespace Serko.Expense.Castle.Facilities
             //should add in other registrations for aspnet core but not needed for an API
             services.AddSingleton<IControllerActivator>(new WindsorControllerActivator(Kernel));
             services.AddSingleton<IMiddlewareFactory>(new WindsorMiddlewareFactory(Kernel));
+            services.AddSingleton<IValidatorFactory>(new WindsorValidatorFactory(Kernel));
         }
 
         protected virtual TType Resolve<TType>(IHandler handler)

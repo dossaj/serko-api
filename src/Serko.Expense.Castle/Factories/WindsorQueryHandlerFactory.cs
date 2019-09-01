@@ -1,7 +1,7 @@
 ﻿using Castle.MicroKernel;
 using Serko.Expense.Core.Cqrs;
 
-namespace Halter.Fencing.Core.Windsor.Factories
+namespace Serko.Expense.Castle.Factories
 {
     public class WindsorQueryHandlerFactory : IQueryHandlerFactory
     {
