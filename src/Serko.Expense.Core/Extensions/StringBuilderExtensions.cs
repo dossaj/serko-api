@@ -1,6 +1,7 @@
 ﻿using System.Text;
+using Serko.Expense.Core.Serialization;
 
-namespace Serko.Expense.Server.Formatters
+namespace Serko.Expense.Core.Extensions
 {
     public static class StringBuilderExtensions
     {

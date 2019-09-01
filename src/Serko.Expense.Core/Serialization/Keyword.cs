@@ -1,4 +1,4 @@
-﻿namespace Serko.Expense.Server.Formatters
+﻿namespace Serko.Expense.Core.Serialization
 {
     public class Keyword
     {

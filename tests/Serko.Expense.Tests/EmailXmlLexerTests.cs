@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
-using Serko.Expense.Server.Formatters;
+using Serko.Expense.Core.Serialization;
 using Xunit;
 
 namespace Serko.Expense.Tests

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Serko.Expense.Core.Extensions;
 
-namespace Serko.Expense.Server.Formatters
+namespace Serko.Expense.Core.Serialization
 {
     public class EmailXmlLexer : IEnumerable<Keyword>
     {

@@ -3,16 +3,16 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
+using Serko.Expense.Core.Serialization;
 using Serko.Expense.Server.Dtos;
-using Serko.Expense.Server.Formatters;
 using Xunit;
 
 namespace Serko.Expense.Tests
 {
-    public class XmlReaderTests
+    public class SerializationTests
     {
         [Fact]
-        public void DoIt()
+        public void Serialization_CorrectContent_ValuesDeserializedCorrectly()
         {
             string xml = @"<SaveReservationDto><expense><cost_centre>DEV002</cost_centre>
     <total>1024.01</total><payment_method>personal card</payment_method>
@@ -33,13 +33,14 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void DoIt2()
+        public void Serialization_EmailContent_ValuesDeserializedCorrectly()
         {
             var email = Assembly
                 .GetExecutingAssembly()
                 .GetManifestResourceStream("Serko.Expense.Tests.Resources.Email");
 
-            using (var stream = new CustomTextReader(email, typeof(SaveReservationDto)))
+            using (var stream = new StreamReader(email))
+            using (var text = new EmailXmlTextReader(new EmailXmlLexer(stream), typeof(SaveReservationDto)))
             using (var reader = XmlReader.Create(stream))
             {
                 var serializer = new XmlSerializer(typeof(SaveReservationDto));
@@ -54,13 +55,13 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void DoIt3()
+        public void Serialization_EmailContentWithEmailAddress_ValuesDeserializedCorrectly()
         {
             var email = Assembly
                 .GetExecutingAssembly()
                 .GetManifestResourceStream("Serko.Expense.Tests.Resources.EmailTo");
 
-            using (var stream = new CustomTextReader(email, typeof(SaveReservationDto)))
+            using (var stream = new EmailXmlTextReader(new EmailXmlLexer(new StreamReader(email)), typeof(SaveReservationDto)))
             using (var reader = XmlReader.Create(stream))
             {
                 var serializer = new XmlSerializer(typeof(SaveReservationDto));
