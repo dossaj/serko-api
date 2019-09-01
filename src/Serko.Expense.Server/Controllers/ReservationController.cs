@@ -31,8 +31,8 @@ namespace Serko.Expense.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ReservationDto> Get(int id)
         {
-            return (await reservations.Get(id))
-                .ToDto();
+            var result = await reservations.Get(id);
+            return result?.ToDto();
         }
 
         [HttpPost]
@@ -43,8 +43,8 @@ namespace Serko.Expense.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            await reservations.Save(saveReservation.ToModel());
-            return Ok();
+            var id = await reservations.Save(saveReservation.ToModel());
+            return Ok(id);
         }
     }
 }

@@ -28,9 +28,9 @@ namespace Serko.Expense.Domain.Services
             return execute.Query<ReservationQuery, List<Reservation>>(new ReservationQuery());
         }
 
-        public Task Save(Reservation reservation)
+        public Task<int> Save(Reservation reservation)
         {
-            return execute.Command(new SaveReservationCommand { Reservation = reservation });
+            return execute.Command<SaveReservationCommand, int>(new SaveReservationCommand { Reservation = reservation });
         }
     }
 }

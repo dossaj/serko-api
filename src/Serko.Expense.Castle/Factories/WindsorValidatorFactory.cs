@@ -1,7 +1,6 @@
 ﻿using System;
 using Castle.MicroKernel;
 using FluentValidation;
-using Serko.Expense.Core.Cqrs;
 
 namespace Serko.Expense.Castle.Factories
 {
@@ -16,14 +15,14 @@ namespace Serko.Expense.Castle.Factories
 
         public IValidator<T> GetValidator<T>()
         {
-            return kernel.Resolve<IValidator<T>>();
+            return kernel.HasComponent(typeof(IValidator<T>)) ? kernel.Resolve<IValidator<T>>() : null;
         }
 
         public IValidator GetValidator(Type type)
         {
             var t = typeof(IValidator<>)
                 .MakeGenericType(type);
-            return (IValidator)kernel.Resolve(t);
+            return kernel.HasComponent(t) ? (IValidator)kernel.Resolve(t) : null;
         }
     }
 }

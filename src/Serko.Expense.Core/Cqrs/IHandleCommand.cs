@@ -6,4 +6,9 @@ namespace Serko.Expense.Core.Cqrs
     {
         Task Execute(TArguments arguments);
     }
+
+    public interface IHandleCommand<in TArguments, TResult>
+    {
+        Task<TResult> Execute(TArguments arguments);
+    }
 }

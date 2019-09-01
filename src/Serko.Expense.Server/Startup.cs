@@ -12,7 +12,6 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
 using Serko.Expense.Domain;
 using Serko.Expense.Server.Configuration;
-using Serko.Expense.Server.Controllers;
 using Serko.Expense.Server.Extensions;
 using Serko.Expense.Server.Formatters;
 using Serko.Expense.Server.Middleware;

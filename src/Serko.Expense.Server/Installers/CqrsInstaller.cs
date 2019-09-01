@@ -28,6 +28,11 @@ namespace Serko.Expense.Server.Installers
                     .LifestyleScoped(),
                 Classes
                     .FromAssemblyInThisApplication(Assembly.GetExecutingAssembly())
+                    .BasedOn(typeof(IHandleCommand<,>))
+                    .WithServiceBase()
+                    .LifestyleScoped(),
+                Classes
+                    .FromAssemblyInThisApplication(Assembly.GetExecutingAssembly())
                     .BasedOn(typeof(IHandleQuery<,>))
                     .WithServiceBase()
                     .LifestyleScoped()

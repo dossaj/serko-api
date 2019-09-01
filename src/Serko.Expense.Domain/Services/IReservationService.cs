@@ -8,6 +8,6 @@ namespace Serko.Expense.Domain.Services
     {
         Task<Reservation> Get(int id);
         Task<List<Reservation>> Get();
-        Task Save(Reservation reservation);
+        Task<int> Save(Reservation reservation);
     }
 }
