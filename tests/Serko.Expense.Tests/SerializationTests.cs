@@ -41,7 +41,7 @@ namespace Serko.Expense.Tests
 
             using (var stream = new StreamReader(email))
             using (var text = new EmailXmlTextReader(new EmailXmlLexer(stream), typeof(SaveReservationDto)))
-            using (var reader = XmlReader.Create(stream))
+            using (var reader = XmlReader.Create(text))
             {
                 var serializer = new XmlSerializer(typeof(SaveReservationDto));
                 var model = (SaveReservationDto)serializer.Deserialize(reader);

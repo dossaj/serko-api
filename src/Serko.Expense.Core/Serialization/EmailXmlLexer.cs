@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Serko.Expense.Core.Extensions;
 
@@ -9,6 +10,8 @@ namespace Serko.Expense.Core.Serialization
     public class EmailXmlLexer : IEnumerable<Keyword>
     {
         private readonly TextReader reader;
+
+        private static readonly string[] EmailStrings = {"To", "Subject", "From", "Cc"};
 
         public EmailXmlLexer(TextReader reader)
         {
@@ -37,8 +40,12 @@ namespace Serko.Expense.Core.Serialization
                 {
                     case ':':
                     {
-                        yield return builder.EmailKeyword();
-                        yield break;
+                        if (IsEmailKeyword(builder))
+                        {
+                            yield return builder.EmailKeyword();
+                            yield break;
+                        }
+                        break;
                     }
                     case '<':
                     {
@@ -78,6 +85,14 @@ namespace Serko.Expense.Core.Serialization
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        private bool IsEmailKeyword(StringBuilder builder)
+        {
+            var text = builder
+                .ToString()
+                .Trim();
+            return EmailStrings.Contains(text);
         }
     }
 }
