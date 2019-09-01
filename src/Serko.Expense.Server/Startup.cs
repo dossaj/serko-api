@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -60,6 +61,7 @@ namespace Serko.Expense.Server
                 {
                     o.InputFormatters.Insert(0, new EmailInputFormatter());
                 })
+                .AddFluentValidation()
                 .AddJsonOptions(o =>
                 {
                     o.SerializerSettings.Converters.Add(new StringEnumConverter(true));

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Serko.Expense.Domain.Models;
 using Serko.Expense.Domain.Services;
 using Serko.Expense.Server.Dtos;
+using Serko.Expense.Server.Extensions;
 
 namespace Serko.Expense.Server.Controllers
 {
@@ -37,48 +36,15 @@ namespace Serko.Expense.Server.Controllers
         }
 
         [HttpPost]
-        public Task Post([FromBody]SaveReservationDto saveReservation)
+        public async Task<IActionResult> Post([FromBody]SaveReservationDto saveReservation)
         {
-            return reservations.Save(saveReservation.ToModel());
-        }
-    }
-
-    public static class DtoExtensions
-    {
-        public static Reservation ToModel(this SaveReservationDto dto)
-        {
-            return new Reservation
+            if (!ModelState.IsValid)
             {
-                Date = dto.DateTime,
-                Description = dto.Description,
-                Vendor = new Vendor
-                {
-                    Name = dto.Vendor
-                },
-                Expense = new Domain.Models.Expense
-                {
-                    CostCentre = dto.Expense.CostCentre,
-                    PaymentMethod = dto.Expense.PaymentMethod,
-                    Total = dto.Expense.Total,
-                    Gst = Math.Round(dto.Expense.Total * 0.15m, 2)
-                }
-            };
-        }
+                return BadRequest(ModelState);
+            }
 
-        public static ReservationDto ToDto(this Reservation reservation)
-        {
-            return new ReservationDto
-            {
-                Id = reservation.Id,
-                Date = reservation.Date,
-                Vendor = reservation.Vendor.Name,
-                Description = reservation.Description,
-                PaymentMethod = reservation.Expense.PaymentMethod,
-                CostCentre = reservation.Expense.CostCentre,
-                Total = reservation.Expense.Total,
-                PreGst = reservation.Expense.PreGst,
-                Gst = reservation.Expense.Gst
-            };
+            await reservations.Save(saveReservation.ToModel());
+            return Ok();
         }
     }
 }

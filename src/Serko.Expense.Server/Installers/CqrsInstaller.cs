@@ -2,7 +2,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using Halter.Fencing.Core.Windsor.Factories;
+using Serko.Expense.Castle.Factories;
 using Serko.Expense.Core.Cqrs;
 
 namespace Serko.Expense.Server.Installers
