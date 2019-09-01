@@ -6,8 +6,8 @@ Project is completely cross platform and setup to run in Visual Studio or Visual
 
 Three launch tasks include
 
-- Console
-- IIS Express
+- Console / Web
+- IIS Express (Windows Only)
 - Docker (Setup to run on linux container)
 
 Project utilizes the following libraries
