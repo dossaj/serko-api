@@ -12,6 +12,7 @@ namespace Serko.Expense.Core.Serialization
 
         private readonly Type type;
         private readonly IEnumerable<Keyword> lexer;
+        private Keyword Current => iterator.Current;
         
         public EmailXmlTextReader(IEnumerable<Keyword> lexer, Type type)
         {
@@ -22,14 +23,14 @@ namespace Serko.Expense.Core.Serialization
         
         public override int Read(char[] buffer, int index, int count)
         {
-            if (iterator.Current == null)
+            if (Current == null)
             {
                 return 0;
             }
 
             for (var i = index; i < count; ++i)
             {
-                if (position == iterator.Current.Value.Length)
+                if (position == Current.Value.Length)
                 {
                     if (!iterator.MoveNext())
                     {
@@ -37,7 +38,7 @@ namespace Serko.Expense.Core.Serialization
                     }
                     position = 0;
                 }
-                buffer[i] = iterator.Current.Value[position++];
+                buffer[i] = Current.Value[position++];
             }
             return count;
         }
@@ -50,6 +51,7 @@ namespace Serko.Expense.Core.Serialization
 
         private IEnumerable<Keyword> Move()
         {
+            //inject root tags
             yield return new Keyword(KeywordType.OpeningTag, $"<{type.Name}>");
 
             foreach (var keyword in lexer)
@@ -62,6 +64,7 @@ namespace Serko.Expense.Core.Serialization
                 yield return keyword;
             }
 
+            //inject root tags
             yield return new Keyword(KeywordType.OpeningTag, $"</{type.Name}>");
         }
 
@@ -73,13 +76,9 @@ namespace Serko.Expense.Core.Serialization
         private void UpdateDepth(KeywordType keywordType)
         {
             if (keywordType == KeywordType.OpeningTag)
-            {
                 depth++;
-            }
             else if (keywordType == KeywordType.ClosingTag)
-            {
                 depth--;
-            }
         }
     }
 }
