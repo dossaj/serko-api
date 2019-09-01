@@ -3,13 +3,17 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
+using Serko.Expense.Domain;
 using Serko.Expense.Server.Configuration;
+using Serko.Expense.Server.Controllers;
 using Serko.Expense.Server.Extensions;
+using Serko.Expense.Server.Formatters;
 using Serko.Expense.Server.Middleware;
 
 namespace Serko.Expense.Server
@@ -52,11 +56,16 @@ namespace Serko.Expense.Server
             });
 
             services
-                .AddMvc()
+                .AddMvc(o =>
+                {
+                    o.InputFormatters.Insert(0, new EmailInputFormatter());
+                })
                 .AddJsonOptions(o =>
                 {
                     o.SerializerSettings.Converters.Add(new StringEnumConverter(true));
                 });
+
+            services.AddDbContext<ExpenseContext>(o => o.UseInMemoryDatabase("Expense"));
 
             return services.AddCastle(application);
         }
@@ -67,12 +76,15 @@ namespace Serko.Expense.Server
             IApplicationLifetime lifetime,
             ILoggerFactory factory)
         {
+            var database = configuration.GetSection<Database>();
+
             factory.AddLog4Net();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.InitializeDatabase(database);
             app.UseMiddleware<TransactionMiddleware>();
 
             app.UseOpenApi();

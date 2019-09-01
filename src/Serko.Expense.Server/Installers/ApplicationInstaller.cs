@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Castle.MicroKernel.Registration;
+﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Serko.Expense.Castle;
 using Serko.Expense.Core;
+using Serko.Expense.Domain.Services;
 
 namespace Serko.Expense.Server.Installers
 {
@@ -16,7 +14,10 @@ namespace Serko.Expense.Server.Installers
             container.Register(
                 Component.For<IScopeManager>()
                     .ImplementedBy<WindsorScopeManager>()
-                    .LifestyleSingleton()
+                    .LifestyleSingleton(),
+                Component.For<IReservationService>()
+                    .ImplementedBy<ReservationService>()
+                    .LifestyleScoped()
             );
         }
     }
