@@ -3,6 +3,7 @@
     public interface ICommandHandlerFactory
     {
         IHandleCommand<TArguments> Resolve<TArguments>();
-        void Release<TArguments>(IHandleCommand<TArguments> handler);
+        IHandleCommand<TArguments, TResult> Resolve<TArguments, TResult>();
+        void Release(object handler);
     }
 }

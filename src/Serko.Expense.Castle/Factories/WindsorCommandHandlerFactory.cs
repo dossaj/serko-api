@@ -17,7 +17,12 @@ namespace Serko.Expense.Castle.Factories
             return kernel.Resolve<IHandleCommand<TArguments>>();
         }
 
-        public void Release<TArguments>(IHandleCommand<TArguments> handler)
+        public IHandleCommand<TArguments, TResult> Resolve<TArguments, TResult>()
+        {
+            return kernel.Resolve<IHandleCommand<TArguments, TResult>>();
+        }
+
+        public void Release(object handler)
         {
             kernel.ReleaseComponent(handler);
         }

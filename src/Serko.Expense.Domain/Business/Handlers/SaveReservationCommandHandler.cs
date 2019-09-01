@@ -5,7 +5,7 @@ using Serko.Expense.Core.Cqrs;
 
 namespace Serko.Expense.Domain.Business.Handlers
 {
-    public class SaveReservationCommandHandler : IHandleCommand<SaveReservationCommand>
+    public class SaveReservationCommandHandler : IHandleCommand<SaveReservationCommand, int>
     {
         private readonly ExpenseContext ctx;
 
@@ -14,7 +14,7 @@ namespace Serko.Expense.Domain.Business.Handlers
             this.ctx = ctx;
         }
 
-        public async Task Execute(SaveReservationCommand arguments)
+        public async Task<int> Execute(SaveReservationCommand arguments)
         {
             var vendor = await ctx
                 .Vendors
@@ -27,6 +27,7 @@ namespace Serko.Expense.Domain.Business.Handlers
 
             ctx.Reservations.Add(arguments.Reservation);
             await ctx.SaveChangesAsync();
+            return arguments.Reservation.Id;
         }
     }
 }

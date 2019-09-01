@@ -39,6 +39,7 @@ namespace Serko.Expense.Tests
                 .GetExecutingAssembly()
                 .GetManifestResourceStream("Serko.Expense.Tests.Resources.Email");
 
+            using (email)
             using (var stream = new StreamReader(email))
             using (var text = new EmailXmlTextReader(new EmailXmlLexer(stream), typeof(SaveReservationDto)))
             using (var reader = XmlReader.Create(text))
@@ -61,6 +62,7 @@ namespace Serko.Expense.Tests
                 .GetExecutingAssembly()
                 .GetManifestResourceStream("Serko.Expense.Tests.Resources.EmailTo");
 
+            using (email)
             using (var stream = new EmailXmlTextReader(new EmailXmlLexer(new StreamReader(email)), typeof(SaveReservationDto)))
             using (var reader = XmlReader.Create(stream))
             {

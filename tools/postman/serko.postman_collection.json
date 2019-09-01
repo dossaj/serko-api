@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "919f3919-df97-4017-847a-67124ba36c85",
+		"name": "Serko",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Reservations",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SpV1qCvvB4JQ1Mz7aghLqTzJi12KvIMPrpAtu9OBiVg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/v1/reservation",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"v1",
+						"reservation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Reservation By Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SpV1qCvvB4JQ1Mz7aghLqTzJi12KvIMPrpAtu9OBiVg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/v1/reservation/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"v1",
+						"reservation",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Reservation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SpV1qCvvB4JQ1Mz7aghLqTzJi12KvIMPrpAtu9OBiVg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"vendor\": \"Viaduct Steakhouse\",\n\t\"description\": \"development team’s project end celebration dinner\",\n\t\"date\": \"Thursday 27 April 2017\",\n\t\"expense\": {\n\t\t\"cost_centre\": \"DEV0002\",\n\t\t\"payment_method\": \"personal card\",\n\t\t\"total\": 1024.01\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/v1/reservation",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"v1",
+						"reservation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Reservation Email",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SpV1qCvvB4JQ1Mz7aghLqTzJi12KvIMPrpAtu9OBiVg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/email",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "Hi Yvaine,\r\n\r\nPlease create an expense claim for the below.  Relevant details are marked up as \r\nrequested...\r\n\r\n<expense><cost_centre>DEV002</cost_centre>\r\n    <total>1024.01</total><payment_method>personal card</payment_method>\r\n</expense>\r\n\r\nFrom: Ivan Castle \r\nSent: Friday, 16 February 2018 10:32 AM\r\nTo: Antoine Lloyd <Antoine.Lloyd@example.com>\r\nSubject: test\r\n\r\nHi Antoine,\r\n\r\nPlease create a reservation at the <vendor>Viaduct Steakhouse</vendor> our \r\n<description>development team’s project end celebration dinner</description> on \r\n<date>Thursday 27 April 2017</date>. We expect to arrive around \r\n7.15pm. Approximately 12 people but I’ll confirm exact numbers closer to the day.\r\n\r\nRegards,\r\nIvan"
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/v1/reservation",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"v1",
+						"reservation"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

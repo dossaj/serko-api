@@ -26,6 +26,19 @@ namespace Serko.Expense.Core.Cqrs
             }
         }
 
+        public Task<TResult> Command<TArguments, TResult>(TArguments arguments)
+        {
+            var handler = commandFactory.Resolve<TArguments, TResult>();
+            try
+            {
+                return handler.Execute(arguments);
+            }
+            finally
+            {
+                commandFactory.Release(handler);
+            }
+        }
+
         public Task<TResult> Query<TArguments, TResult>(TArguments arguments)
         {
             var handler = queryFactory.Resolve<TArguments, TResult>();
