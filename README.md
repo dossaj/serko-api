@@ -10,7 +10,7 @@ Three launch tasks include
 - IIS Express
 - Docker (Setup to run on linux container)
 
-Project utilises the following libraries
+Project utilizes the following libraries
 
 - ASP.NET Core 2.2
 - Fluent Validation
