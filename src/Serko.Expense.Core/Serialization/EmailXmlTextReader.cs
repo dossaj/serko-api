@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Serko.Expense.Core.Serialization
 {
@@ -20,7 +21,7 @@ namespace Serko.Expense.Core.Serialization
             this.type = type;
             Initialise();
         }
-        
+
         public override int Read(char[] buffer, int index, int count)
         {
             if (Current == null)

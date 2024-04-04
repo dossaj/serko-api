@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Serko.Expense.Core.Serialization;
 using Xunit;
 
@@ -8,14 +9,14 @@ namespace Serko.Expense.Tests
     public class EmailXmlLexerTests
     {
         [Fact]
-        public void Enumerable_TagWithValue_CorrectKeywordsReturned()
+        public async Task Enumerable_TagWithValue_CorrectKeywordsReturned()
         {
             //arrange
             var reader = new StringReader("<test>text</test>");
             var lexer = new EmailXmlLexer(reader);
 
             //act
-            var result = lexer.ToArray();
+            var result = await lexer.ToArrayAsync();
 
             //assert
             Assert.Equal("<test>", result[0].Value);
@@ -28,14 +29,14 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Enumerable_TextBeforeTagWithValue_CorrectKeywordsReturned()
+        public async Task Enumerable_TextBeforeTagWithValue_CorrectKeywordsReturned()
         {
             //arrange
             var reader = new StringReader("asd<test>text</test>");
             var lexer = new EmailXmlLexer(reader);
 
             //act
-            var result = lexer.ToArray();
+            var result = await lexer.ToArrayAsync();
 
             //assert
             Assert.Equal("asd", result[0].Value);
@@ -50,14 +51,14 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Enumerable_TextAfterTagWithValue_CorrectKeywordsReturned()
+        public async Task Enumerable_TextAfterTagWithValue_CorrectKeywordsReturned()
         {
             //arrange
             var reader = new StringReader("<test>text</test>asd");
             var lexer = new EmailXmlLexer(reader);
 
             //act
-            var result = lexer.ToArray();
+            var result = await lexer.ToArrayAsync();
 
             //assert
             Assert.Equal("<test>", result[0].Value);
@@ -72,14 +73,14 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Enumerable_TextBeforeAndAfterTagWithValue_CorrectKeywordsReturned()
+        public async Task Enumerable_TextBeforeAndAfterTagWithValue_CorrectKeywordsReturned()
         {
             //arrange
             var reader = new StringReader("asd<test>text</test>asd");
             var lexer = new EmailXmlLexer(reader);
 
             //act
-            var result = lexer.ToArray();
+            var result = await lexer.ToArrayAsync();
 
             //assert
             Assert.Equal("asd", result[0].Value);
@@ -96,14 +97,14 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Enumerable_TextBeforeAndAfterWithNestedTagAndValue_CorrectKeywordsReturned()
+        public async Task Enumerable_TextBeforeAndAfterWithNestedTagAndValue_CorrectKeywordsReturned()
         {
             //arrange
             var reader = new StringReader("asd<test><inner>text</inner></test>asd");
             var lexer = new EmailXmlLexer(reader);
 
             //act
-            var result = lexer.ToArray();
+            var result = await lexer.ToArrayAsync();
 
             //assert
             Assert.Equal("asd", result[0].Value);
@@ -124,14 +125,14 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Enumerable_EmailField_TagIsIgnoredAndCorrectKeywordsReturned()
+        public async Task Enumerable_EmailField_TagIsIgnoredAndCorrectKeywordsReturned()
         {
             //arrange
             var reader = new StringReader("To: Antoine Lloyd <Antoine.Lloyd@example.com>");
             var lexer = new EmailXmlLexer(reader);
 
             //act
-            var result = lexer.ToArray();
+            var result = await lexer.ToArrayAsync();
 
             //assert
             Assert.Equal("To", result[0].Value);

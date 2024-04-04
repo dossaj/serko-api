@@ -7,7 +7,7 @@ namespace Serko.Expense.Specs.Steps
     public class AuthorizationSteps
     {
         private const string Token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SpV1qCvvB4JQ1Mz7aghLqTzJi12KvIMPrpAtu9OBiVg";
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjbGllbnRpZCIsImF1ZCI6ImNsaWVudGlkIiwic3ViIjoiMTIzIiwiYSI6IjQ1NiIsImlhdCI6MTYyMTc5OTU5OCwiZXhwIjoxNjIxNzk5NjU4fQ.eymBE5RxtboMcPeNR4POoWepRPxHsKrRcEviEWbe06w";
 
         private readonly ApiContext context;
 

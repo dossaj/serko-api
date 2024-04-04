@@ -13,6 +13,7 @@ using Serko.Expense.Castle.Facilities;
 using Serko.Expense.Castle.Resolvers;
 using Serko.Expense.Core;
 using Serko.Expense.Core.Adapters;
+using IConfigurationManager = Serko.Expense.Core.IConfigurationManager;
 
 namespace Serko.Expense.Server
 {

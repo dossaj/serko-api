@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Serko.Expense.Core.Extensions;
 
 namespace Serko.Expense.Core.Serialization
 {
-    public class EmailXmlLexer : IEnumerable<Keyword>
+    public class EmailXmlLexer : IAsyncEnumerable<Keyword>
     {
         private readonly TextReader reader;
 
@@ -18,10 +19,10 @@ namespace Serko.Expense.Core.Serialization
             this.reader = reader;
         }
 
-        public IEnumerator<Keyword> GetEnumerator()
+        public async IAsyncEnumerator<Keyword> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
             string line;
-            while((line = reader.ReadLine()) != null)
+            while ((line = await reader.ReadLineAsync()) != null)
             {
                 foreach (var keyword in Parse(line))
                 {
@@ -80,11 +81,6 @@ namespace Serko.Expense.Core.Serialization
             {
                 yield return builder.TextKeyword();
             }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         private bool IsEmailKeyword(StringBuilder builder)
