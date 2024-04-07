@@ -2,12 +2,11 @@
 using System.Threading.Tasks;
 using Serko.Expense.Domain.Models;
 
-namespace Serko.Expense.Domain.Services
+namespace Serko.Expense.Domain.Services;
+
+public interface IReservationService
 {
-    public interface IReservationService
-    {
-        Task<Reservation> Get(int id);
-        Task<List<Reservation>> Get();
-        Task<int> Save(Reservation reservation);
-    }
+    Task<Reservation> Get(int id);
+    Task<List<Reservation>> Get();
+    Task<int> Save(Reservation reservation);
 }

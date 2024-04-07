@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Serko.Expense.Core
+namespace Serko.Expense.Core;
+
+public interface IServiceProviderVisitor
 {
-    public interface IServiceProviderVisitor
-    {
-        void Visit(IServiceProvider serviceProvider);
-    }
+    void Visit(IServiceProvider serviceProvider);
 }

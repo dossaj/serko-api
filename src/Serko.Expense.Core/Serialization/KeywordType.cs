@@ -1,10 +1,9 @@
-﻿namespace Serko.Expense.Core.Serialization
+﻿namespace Serko.Expense.Core.Serialization;
+
+public enum KeywordType
 {
-    public enum KeywordType
-    {
-        Email,
-        OpeningTag,
-        ClosingTag,
-        Text
-    }
+    Email,
+    OpeningTag,
+    ClosingTag,
+    Text
 }

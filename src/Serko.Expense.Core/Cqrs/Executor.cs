@@ -1,55 +1,54 @@
 ﻿using System.Threading.Tasks;
 
-namespace Serko.Expense.Core.Cqrs
+namespace Serko.Expense.Core.Cqrs;
+
+public class Executor : IExecute
 {
-    public class Executor : IExecute
+    private readonly ICommandHandlerFactory commandFactory;
+    private readonly IQueryHandlerFactory queryFactory;
+
+    public Executor(ICommandHandlerFactory commandFactory, IQueryHandlerFactory queryFactory)
     {
-        private readonly ICommandHandlerFactory commandFactory;
-        private readonly IQueryHandlerFactory queryFactory;
+        this.commandFactory = commandFactory;
+        this.queryFactory = queryFactory;
+    }
 
-        public Executor(ICommandHandlerFactory commandFactory, IQueryHandlerFactory queryFactory)
+    public Task Command<TArguments>(TArguments arguments)
+    {
+        var handler = commandFactory.Resolve<TArguments>();
+        try
         {
-            this.commandFactory = commandFactory;
-            this.queryFactory = queryFactory;
+            return handler.Execute(arguments);
         }
-
-        public Task Command<TArguments>(TArguments arguments)
+        finally
         {
-            var handler = commandFactory.Resolve<TArguments>();
-            try
-            {
-                return handler.Execute(arguments);
-            }
-            finally
-            {
-                commandFactory.Release(handler);
-            }
+            commandFactory.Release(handler);
         }
+    }
 
-        public Task<TResult> Command<TArguments, TResult>(TArguments arguments)
+    public Task<TResult> Command<TArguments, TResult>(TArguments arguments)
+    {
+        var handler = commandFactory.Resolve<TArguments, TResult>();
+        try
         {
-            var handler = commandFactory.Resolve<TArguments, TResult>();
-            try
-            {
-                return handler.Execute(arguments);
-            }
-            finally
-            {
-                commandFactory.Release(handler);
-            }
+            return handler.Execute(arguments);
         }
-
-        public Task<TResult> Query<TArguments, TResult>(TArguments arguments)
+        finally
         {
-            var handler = queryFactory.Resolve<TArguments, TResult>();
-            try
-            {
-                return handler.Execute(arguments);
-            }
-            finally
-            {
-                queryFactory.Release(handler);
-            }
+            commandFactory.Release(handler);
+        }
+    }
+
+    public Task<TResult> Query<TArguments, TResult>(TArguments arguments)
+    {
+        var handler = queryFactory.Resolve<TArguments, TResult>();
+        try
+        {
+            return handler.Execute(arguments);
+        }
+        finally
+        {
+            queryFactory.Release(handler);
         }
     }
 }

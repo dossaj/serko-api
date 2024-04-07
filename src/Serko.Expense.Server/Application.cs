@@ -15,81 +15,79 @@ using Serko.Expense.Core;
 using Serko.Expense.Core.Adapters;
 using IConfigurationManager = Serko.Expense.Core.IConfigurationManager;
 
-namespace Serko.Expense.Server
+namespace Serko.Expense.Server;
+
+public class Application : IDisposable
 {
-    public class Application : IDisposable
+    private bool disposed;
+
+    public DefaultKernel Kernel { get; protected set; }
+    public WindsorContainer Container { get; protected set; }
+    public IConfigurationManager Manager { get; protected set; }
+    public IServiceCollection Services { get; protected set; }
+
+    public Application(IConfiguration configuration)
     {
-        private bool disposed;
+        Manager = new ConfigurationManagerAdapter(configuration);
+        Kernel = new DefaultKernel(new DefaultDependencyResolver(), new DefaultProxyFactory());
+        Container = new WindsorContainer(Kernel, new DefaultComponentInstaller());
+    }
 
-        public DefaultKernel Kernel { get; protected set; }
-        public WindsorContainer Container { get; protected set; }
-        public IConfigurationManager Manager { get; protected set; }
-        public IServiceCollection Services { get; protected set; }
+    public IServiceProvider Initialize(IServiceCollection services)
+    {
+        Services = services;
+        Initialize();
+        return Kernel
+            .Resolve<IServiceProviderFactory>()
+            .Resolve();
+    }
 
-        public Application(IConfiguration configuration)
+    protected void Initialize()
+    {
+        using var disposable = Kernel.OptimizeDependencyResolution();
+        
+        InitializeResolvers();
+        InitializeFacilities();
+        InitializeComponents();
+    }
+
+    protected virtual void InitializeFacilities()
+    {
+        Container.AddFacility(new TypedFactoryFacility());
+        Container.AddFacility(new AspNetCoreFacility(Services));
+    }
+
+    protected virtual void InitializeComponents()
+    {
+        var filter = new AssemblyFilter(AppDomain.CurrentDomain.BaseDirectory, "Serko.*");
+        Container.Install(FromAssembly.InDirectory(filter));
+    }
+
+    protected virtual void InitializeResolvers()
+    {
+        Kernel.Resolver.AddSubResolver(new WindsorConfigurationConvention(Manager));
+        Kernel.Resolver.AddSubResolver(new CollectionResolver(Container.Kernel, true));
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposed)
         {
-            Manager = new ConfigurationManagerAdapter(configuration);
-            Kernel = new DefaultKernel(new DefaultDependencyResolver(), new DefaultProxyFactory());
-            Container = new WindsorContainer(Kernel, new DefaultComponentInstaller());
+            return;
         }
 
-        public IServiceProvider Initialize(IServiceCollection services)
+        if (disposing)
         {
-            Services = services;
-            Initialize();
-            return Kernel
-                .Resolve<IServiceProviderFactory>()
-                .Resolve();
+            Kernel?.Dispose();
+            Container?.Dispose();
         }
 
-        protected void Initialize()
-        {
-            using (Kernel.OptimizeDependencyResolution())
-            {
-                InitializeResolvers();
-                InitializeFacilities();
-                InitializeComponents();
-            }
-        }
+        disposed = true;
+    }
 
-        protected virtual void InitializeFacilities()
-        {
-            Container.AddFacility(new TypedFactoryFacility());
-            Container.AddFacility(new AspNetCoreFacility(Services));
-        }
-
-        protected virtual void InitializeComponents()
-        {
-            var filter = new AssemblyFilter(AppDomain.CurrentDomain.BaseDirectory, "Serko.*");
-            Container.Install(FromAssembly.InDirectory(filter));
-        }
-
-        protected virtual void InitializeResolvers()
-        {
-            Kernel.Resolver.AddSubResolver(new WindsorConfigurationConvention(Manager));
-            Kernel.Resolver.AddSubResolver(new CollectionResolver(Container.Kernel, true));
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                Kernel?.Dispose();
-                Container?.Dispose();
-            }
-
-            disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

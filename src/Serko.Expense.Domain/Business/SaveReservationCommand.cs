@@ -1,9 +1,8 @@
 ﻿using Serko.Expense.Domain.Models;
 
-namespace Serko.Expense.Domain.Business
+namespace Serko.Expense.Domain.Business;
+
+public class SaveReservationCommand
 {
-    public class SaveReservationCommand
-    {
-        public Reservation Reservation { get; set; }
-    }
+    public Reservation Reservation { get; set; }
 }

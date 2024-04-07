@@ -1,8 +1,7 @@
-﻿namespace Serko.Expense.Server.Configuration
+﻿namespace Serko.Expense.Server.Configuration;
+
+public class Connection
 {
-    public class Connection
-    {
-        public string SqlServer { get; set; }
-        public string Sqlite { get; set; }
-    }
+    public string SqlServer { get; set; }
+    public string Sqlite { get; set; }
 }

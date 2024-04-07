@@ -1,30 +1,29 @@
 ﻿using System.Text;
 using Serko.Expense.Core.Serialization;
 
-namespace Serko.Expense.Core.Extensions
+namespace Serko.Expense.Core.Extensions;
+
+public static class StringBuilderExtensions
 {
-    public static class StringBuilderExtensions
+    public static Keyword TagKeyword(this StringBuilder builder, bool open)
     {
-        public static Keyword TagKeyword(this StringBuilder builder, bool open)
-        {
-            var text = builder.ToString();
-            var type = open ? KeywordType.OpeningTag : KeywordType.ClosingTag;
-            builder.Clear();
+        var text = builder.ToString();
+        var type = open ? KeywordType.OpeningTag : KeywordType.ClosingTag;
+        builder.Clear();
 
-            return new Keyword(type, text);
-        }
-        
-        public static Keyword TextKeyword(this StringBuilder builder)
-        {
-            var text = builder.ToString();
-            builder.Clear();
+        return new Keyword(type, text);
+    }
+    
+    public static Keyword TextKeyword(this StringBuilder builder)
+    {
+        var text = builder.ToString();
+        builder.Clear();
 
-            return new Keyword(KeywordType.Text, text);
-        }
+        return new Keyword(KeywordType.Text, text);
+    }
 
-        public static Keyword EmailKeyword(this StringBuilder builder)
-        {
-            return new Keyword(KeywordType.Email, builder.ToString());
-        }
+    public static Keyword EmailKeyword(this StringBuilder builder)
+    {
+        return new Keyword(KeywordType.Email, builder.ToString());
     }
 }

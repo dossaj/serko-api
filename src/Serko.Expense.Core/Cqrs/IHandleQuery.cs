@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Serko.Expense.Core.Cqrs
+namespace Serko.Expense.Core.Cqrs;
+
+public interface IHandleQuery<in TArguments, TResult>
 {
-    public interface IHandleQuery<in TArguments, TResult>
-    {
-        Task<TResult> Execute(TArguments arguments);
-    }
+    Task<TResult> Execute(TArguments arguments);
 }
