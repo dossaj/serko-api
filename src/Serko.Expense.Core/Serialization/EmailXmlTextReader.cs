@@ -1,85 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 
-namespace Serko.Expense.Core.Serialization
+namespace Serko.Expense.Core.Serialization;
+
+public class EmailXmlTextReader : TextReader
 {
-    public class EmailXmlTextReader : TextReader
+    private int depth;
+    private int position;
+    private IEnumerator<Keyword> iterator;
+
+    private readonly Type type;
+    private readonly IEnumerable<Keyword> lexer;
+
+    private Keyword Current => iterator.Current;
+    
+    public EmailXmlTextReader(IEnumerable<Keyword> lexer, Type type)
     {
-        private int depth;
-        private int position;
-        private IEnumerator<Keyword> iterator;
+        this.lexer = lexer;
+        this.type = type;
+        Initialise();
+    }
 
-        private readonly Type type;
-        private readonly IEnumerable<Keyword> lexer;
-        private Keyword Current => iterator.Current;
-        
-        public EmailXmlTextReader(IEnumerable<Keyword> lexer, Type type)
+    public override int Read(char[] buffer, int index, int count)
+    {
+        if (Current == null)
         {
-            this.lexer = lexer;
-            this.type = type;
-            Initialise();
+            return 0;
         }
 
-        public override int Read(char[] buffer, int index, int count)
+        for (var i = index; i < count; ++i)
         {
-            if (Current == null)
+            if (position == Current.Value.Length)
             {
-                return 0;
-            }
-
-            for (var i = index; i < count; ++i)
-            {
-                if (position == Current.Value.Length)
+                if (!iterator.MoveNext())
                 {
-                    if (!iterator.MoveNext())
-                    {
-                        return i - index;
-                    }
-                    position = 0;
+                    return i - index;
                 }
-                buffer[i] = Current.Value[position++];
+                position = 0;
             }
-            return count;
+            buffer[i] = Current.Value[position++];
         }
+        return count;
+    }
 
-        protected void Initialise()
+    protected void Initialise()
+    {
+        iterator = Move().GetEnumerator();
+        iterator.MoveNext();
+    }
+
+    private IEnumerable<Keyword> Move()
+    {
+        //inject root tags
+        yield return new Keyword(KeywordType.OpeningTag, $"<{type.Name}>");
+
+        foreach (var keyword in lexer)
         {
-            iterator = Move().GetEnumerator();
-            iterator.MoveNext();
-        }
-
-        private IEnumerable<Keyword> Move()
-        {
-            //inject root tags
-            yield return new Keyword(KeywordType.OpeningTag, $"<{type.Name}>");
-
-            foreach (var keyword in lexer)
+            if (ExternalTextOrEmail(keyword.KeywordType))
             {
-                if (ExternalTextOrEmail(keyword.KeywordType))
-                {
-                    continue;
-                }
-                UpdateDepth(keyword.KeywordType);
-                yield return keyword;
+                continue;
             }
-
-            //inject root tags
-            yield return new Keyword(KeywordType.OpeningTag, $"</{type.Name}>");
+            UpdateDepth(keyword.KeywordType);
+            yield return keyword;
         }
 
-        private bool ExternalTextOrEmail(KeywordType keywordType)
-        {
-            return (depth == 0 && keywordType == KeywordType.Text) || keywordType == KeywordType.Email;
-        }
+        //inject root tags
+        yield return new Keyword(KeywordType.OpeningTag, $"</{type.Name}>");
+    }
 
-        private void UpdateDepth(KeywordType keywordType)
-        {
-            if (keywordType == KeywordType.OpeningTag)
-                depth++;
-            else if (keywordType == KeywordType.ClosingTag)
-                depth--;
-        }
+    private bool ExternalTextOrEmail(KeywordType keywordType)
+    {
+        return (depth == 0 && keywordType == KeywordType.Text) || keywordType == KeywordType.Email;
+    }
+
+    private void UpdateDepth(KeywordType keywordType)
+    {
+        if (keywordType == KeywordType.OpeningTag)
+            depth++;
+        else if (keywordType == KeywordType.ClosingTag)
+            depth--;
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace Serko.Expense.Core.Cqrs
+﻿namespace Serko.Expense.Core.Cqrs;
+
+public interface ICommandHandlerFactory
 {
-    public interface ICommandHandlerFactory
-    {
-        IHandleCommand<TArguments> Resolve<TArguments>();
-        IHandleCommand<TArguments, TResult> Resolve<TArguments, TResult>();
-        void Release(object handler);
-    }
+    IHandleCommand<TArguments> Resolve<TArguments>();
+    IHandleCommand<TArguments, TResult> Resolve<TArguments, TResult>();
+    void Release(object handler);
 }

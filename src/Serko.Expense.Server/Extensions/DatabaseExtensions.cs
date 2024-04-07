@@ -6,37 +6,33 @@ using Serko.Expense.Domain;
 using Serko.Expense.Domain.Models;
 using Serko.Expense.Server.Configuration;
 
-namespace Serko.Expense.Server.Extensions
+namespace Serko.Expense.Server.Extensions;
+
+public static class DatabaseExtensions
 {
-    public static class DatabaseExtensions
+    public static void InitializeDatabase(this IApplicationBuilder app, Database configuration)
     {
-        public static void InitializeDatabase(this IApplicationBuilder app, Database configuration)
+        var scopeFactory = app
+            .ApplicationServices
+            .GetRequiredService<IServiceScopeFactory>();
+
+        using var scope = scopeFactory.CreateScope();
+        var ctx = scope
+            .ServiceProvider
+            .GetRequiredService<ExpenseContext>();
+
+        if (!ctx.Database.IsInMemory())
         {
-            var scopeFactory = app
-                .ApplicationServices
-                .GetRequiredService<IServiceScopeFactory>();
-
+            ctx.Database.Migrate();
+        }
             
-            using (var scope = scopeFactory.CreateScope())
-            {
-                var ctx = scope
-                    .ServiceProvider
-                    .GetRequiredService<ExpenseContext>();
-
-                if (!ctx.Database.IsInMemory())
-                {
-                    ctx.Database.Migrate();
-                }
-                
-                if (!ctx.Vendors.Any())
-                {
-                    ctx.Vendors.AddRange(
-                        configuration
-                            .Vendors
-                            .Select(x => new Vendor{ Name = x })
-                    );
-                }
-            }
+        if (!ctx.Vendors.Any())
+        {
+            ctx.Vendors.AddRange(
+                configuration
+                    .Vendors
+                    .Select(x => new Vendor{ Name = x })
+            );
         }
     }
 }

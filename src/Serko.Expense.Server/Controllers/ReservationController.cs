@@ -8,43 +8,42 @@ using Serko.Expense.Domain.Services;
 using Serko.Expense.Server.Dtos;
 using Serko.Expense.Server.Extensions;
 
-namespace Serko.Expense.Server.Controllers
+namespace Serko.Expense.Server.Controllers;
+
+[Route("api/v1/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+public class ReservationController : ControllerBase
 {
-    [Route("api/v1/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class ReservationController : ControllerBase
+    private readonly IReservationService reservations;
+
+    public ReservationController(IReservationService reservations)
     {
-        private readonly IReservationService reservations;
+        this.reservations = reservations;
+    }
 
-        public ReservationController(IReservationService reservations)
+    [HttpGet]
+    public async Task<IEnumerable<ReservationDto>> Get()
+    {
+        return (await reservations.Get())
+            .Select(x => x.ToDto());
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ReservationDto> Get(int id)
+    {
+        var result = await reservations.Get(id);
+        return result?.ToDto();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody]SaveReservationDto saveReservation)
+    {
+        if (!ModelState.IsValid)
         {
-            this.reservations = reservations;
+            return BadRequest(ModelState);
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<ReservationDto>> Get()
-        {
-            return (await reservations.Get())
-                .Select(x => x.ToDto());
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ReservationDto> Get(int id)
-        {
-            var result = await reservations.Get(id);
-            return result?.ToDto();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody]SaveReservationDto saveReservation)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var id = await reservations.Save(saveReservation.ToModel());
-            return Ok(id);
-        }
+        var id = await reservations.Save(saveReservation.ToModel());
+        return Ok(id);
     }
 }

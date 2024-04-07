@@ -1,15 +1,14 @@
 ﻿using TechTalk.SpecFlow;
 
-namespace Serko.Expense.Specs.Steps
-{
-    [Binding]
-    public class BackgroundSteps
-    {
-        private readonly ApiContext context;
+namespace Serko.Expense.Specs.Steps;
 
-        public BackgroundSteps(ApiContext context)
-        {
-            this.context = context;
-        }
+[Binding]
+public class BackgroundSteps
+{
+    private readonly ApiContext context;
+
+    public BackgroundSteps(ApiContext context)
+    {
+        this.context = context;
     }
 }

@@ -2,13 +2,12 @@
 using Castle.MicroKernel.Lifestyle.Scoped;
 using Serko.Expense.Core;
 
-namespace Serko.Expense.Castle
+namespace Serko.Expense.Castle;
+
+public class WindsorScopeManager : IScopeManager
 {
-    public class WindsorScopeManager : IScopeManager
+    public IDisposable BeginScope()
     {
-        public IDisposable BeginScope()
-        {
-            return new CallContextLifetimeScope();
-        }
+        return new CallContextLifetimeScope();
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Serko.Expense.Core
+namespace Serko.Expense.Core;
+
+public interface IScopeManager
 {
-    public interface IScopeManager
-    {
-        IDisposable BeginScope();
-    }
+    IDisposable BeginScope();
 }

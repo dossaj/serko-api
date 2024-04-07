@@ -1,19 +1,18 @@
 ﻿using System;
 
-namespace Serko.Expense.Core
-{
-    public class NullScopeManager : IScopeManager
-    {
-        public IDisposable BeginScope()
-        {
-            return new NullDisposable();
-        }
+namespace Serko.Expense.Core;
 
-        private class NullDisposable : IDisposable
+public class NullScopeManager : IScopeManager
+{
+    public IDisposable BeginScope()
+    {
+        return new NullDisposable();
+    }
+
+    private class NullDisposable : IDisposable
+    {
+        public void Dispose()
         {
-            public void Dispose()
-            {
-            }
         }
     }
 }

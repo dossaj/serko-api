@@ -1,7 +1,6 @@
-﻿namespace Serko.Expense.Domain.Business
+﻿namespace Serko.Expense.Domain.Business;
+
+public class ReservationQuery
 {
-    public class ReservationQuery
-    {
-        public int? Id { get; set; }
-    }
+    public int? Id { get; set; }
 }

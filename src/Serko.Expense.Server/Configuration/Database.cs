@@ -1,7 +1,6 @@
-﻿namespace Serko.Expense.Server.Configuration
+﻿namespace Serko.Expense.Server.Configuration;
+
+public class Database
 {
-    public class Database
-    {
-        public string[] Vendors { get; set; }
-    }
+    public string[] Vendors { get; set; }
 }

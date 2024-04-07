@@ -6,89 +6,88 @@ using System.Text;
 using System.Threading;
 using Serko.Expense.Core.Extensions;
 
-namespace Serko.Expense.Core.Serialization
+namespace Serko.Expense.Core.Serialization;
+
+public class EmailXmlLexer : IAsyncEnumerable<Keyword>
 {
-    public class EmailXmlLexer : IAsyncEnumerable<Keyword>
+    private readonly TextReader reader;
+
+    private static readonly string[] EmailStrings = {"To", "Subject", "From", "Cc"};
+
+    public EmailXmlLexer(TextReader reader)
     {
-        private readonly TextReader reader;
+        this.reader = reader;
+    }
 
-        private static readonly string[] EmailStrings = {"To", "Subject", "From", "Cc"};
-
-        public EmailXmlLexer(TextReader reader)
+    public async IAsyncEnumerator<Keyword> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+    {
+        string line;
+        while ((line = await reader.ReadLineAsync()) != null)
         {
-            this.reader = reader;
-        }
-
-        public async IAsyncEnumerator<Keyword> GetAsyncEnumerator(CancellationToken cancellationToken = default)
-        {
-            string line;
-            while ((line = await reader.ReadLineAsync()) != null)
+            foreach (var keyword in Parse(line))
             {
-                foreach (var keyword in Parse(line))
+                yield return keyword;
+            }
+        }
+    }
+
+    public IEnumerable<Keyword> Parse(string line)
+    {
+        var open = false;
+        var builder = new StringBuilder(line.Length);
+        foreach (var c in line)
+        {
+            switch (c)
+            {
+                case ':':
                 {
-                    yield return keyword;
+                    if (IsEmailKeyword(builder))
+                    {
+                        yield return builder.EmailKeyword();
+                        yield break;
+                    }
+                    break;
                 }
-            }
-        }
-
-        public IEnumerable<Keyword> Parse(string line)
-        {
-            var open = false;
-            var builder = new StringBuilder(line.Length);
-            foreach (var c in line)
-            {
-                switch (c)
+                case '<':
                 {
-                    case ':':
+                    if (builder.Length > 0)
                     {
-                        if (IsEmailKeyword(builder))
-                        {
-                            yield return builder.EmailKeyword();
-                            yield break;
-                        }
-                        break;
+                        yield return builder.TextKeyword();
                     }
-                    case '<':
-                    {
-                        if (builder.Length > 0)
-                        {
-                            yield return builder.TextKeyword();
-                        }
 
-                        builder.Append(c);
-                        open = true;
-                        break;
-                    }
-                    case '>':
-                    {
-                        builder.Append(c);
-                        yield return builder.TagKeyword(open);
-                        break;
-                    }
-                    case '/':
-                    {
-                        builder.Append(c);
-                        open = false;
-                        break;
-                    }
-                    default:
-                        builder.Append(c);
-                        break;
+                    builder.Append(c);
+                    open = true;
+                    break;
                 }
-            }
-
-            if (builder.Length > 0)
-            {
-                yield return builder.TextKeyword();
+                case '>':
+                {
+                    builder.Append(c);
+                    yield return builder.TagKeyword(open);
+                    break;
+                }
+                case '/':
+                {
+                    builder.Append(c);
+                    open = false;
+                    break;
+                }
+                default:
+                    builder.Append(c);
+                    break;
             }
         }
 
-        private bool IsEmailKeyword(StringBuilder builder)
+        if (builder.Length > 0)
         {
-            var text = builder
-                .ToString()
-                .Trim();
-            return EmailStrings.Contains(text);
+            yield return builder.TextKeyword();
         }
+    }
+
+    private bool IsEmailKeyword(StringBuilder builder)
+    {
+        var text = builder
+            .ToString()
+            .Trim();
+        return EmailStrings.Contains(text);
     }
 }
