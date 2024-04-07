@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Serko.Expense.Core.Serialization;
@@ -33,48 +35,50 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Serialization_EmailContent_ValuesDeserializedCorrectly()
+        public async Task Serialization_EmailContent_ValuesDeserializedCorrectly()
         {
-            var email = Assembly
+            using var email = Assembly
                 .GetExecutingAssembly()
                 .GetManifestResourceStream("Serko.Expense.Tests.Resources.Email");
 
-            using (email)
-            using (var stream = new StreamReader(email))
-            using (var text = new EmailXmlTextReader(new EmailXmlLexer(stream), typeof(SaveReservationDto)))
-            using (var reader = XmlReader.Create(text))
-            {
-                var serializer = new XmlSerializer(typeof(SaveReservationDto));
-                var model = (SaveReservationDto)serializer.Deserialize(reader);
+            using var stream = new StreamReader(email);
+            var lexer = await new EmailXmlLexer(stream).ToArrayAsync();
 
-                Assert.Equal("Thursday 27 April 2017", model.Date);
-                Assert.Equal(new DateTime(2017, 4, 27), model.DateTime);
-                Assert.Equal("Viaduct Steakhouse", model.Vendor);
-                Assert.Equal("DEV002", model.Expense.CostCentre);
-                Assert.Equal(1024.01m, model.Expense.Total);
-            }
+            using var text = new EmailXmlTextReader(lexer, typeof(SaveReservationDto));
+            using var reader = XmlReader.Create(text);
+            
+            var serializer = new XmlSerializer(typeof(SaveReservationDto));
+            var model = (SaveReservationDto)serializer.Deserialize(reader);
+
+            Assert.Equal("Thursday 27 April 2017", model.Date);
+            Assert.Equal(new DateTime(2017, 4, 27), model.DateTime);
+            Assert.Equal("Viaduct Steakhouse", model.Vendor);
+            Assert.Equal("DEV002", model.Expense.CostCentre);
+            Assert.Equal(1024.01m, model.Expense.Total);
+            
         }
 
         [Fact]
-        public void Serialization_EmailContentWithEmailAddress_ValuesDeserializedCorrectly()
+        public async Task Serialization_EmailContentWithEmailAddress_ValuesDeserializedCorrectly()
         {
             var email = Assembly
                 .GetExecutingAssembly()
                 .GetManifestResourceStream("Serko.Expense.Tests.Resources.EmailTo");
 
-            using (email)
-            using (var stream = new EmailXmlTextReader(new EmailXmlLexer(new StreamReader(email)), typeof(SaveReservationDto)))
-            using (var reader = XmlReader.Create(stream))
-            {
-                var serializer = new XmlSerializer(typeof(SaveReservationDto));
-                var model = (SaveReservationDto)serializer.Deserialize(reader);
+            using var stream = new StreamReader(email);
+            var lexer = await new EmailXmlLexer(stream).ToArrayAsync();
 
-                Assert.Equal("Thursday 27 April 2017", model.Date);
-                Assert.Equal(new DateTime(2017, 4, 27), model.DateTime);
-                Assert.Equal("Viaduct Steakhouse", model.Vendor);
-                Assert.Equal("DEV002", model.Expense.CostCentre);
-                Assert.Equal(1024.01m, model.Expense.Total);
-            }
+            using var text = new EmailXmlTextReader(lexer, typeof(SaveReservationDto));
+            using var reader = XmlReader.Create(text);
+                        
+            var serializer = new XmlSerializer(typeof(SaveReservationDto));
+            var model = (SaveReservationDto)serializer.Deserialize(reader);
+
+            Assert.Equal("Thursday 27 April 2017", model.Date);
+            Assert.Equal(new DateTime(2017, 4, 27), model.DateTime);
+            Assert.Equal("Viaduct Steakhouse", model.Vendor);
+            Assert.Equal("DEV002", model.Expense.CostCentre);
+            Assert.Equal(1024.01m, model.Expense.Total);
         }
     }
 }

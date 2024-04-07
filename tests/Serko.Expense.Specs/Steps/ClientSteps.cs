@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -95,18 +96,16 @@ namespace Serko.Expense.Specs.Steps
         [When(@"I post the email '(.*)' to '(.*)'")]
         public async Task WhenIPostTheEmailTo(string p0, string p1)
         {
-            var email = Assembly
+            using var email = Assembly
                 .GetExecutingAssembly()
                 .GetManifestResourceStream($"Serko.Expense.Specs.Resources.{p0}");
 
-            using (email)
-            {
-                var content = new StreamContent(email);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/email");
-                context.Response = await context
-                    .Client
-                    .PostAsync(p1, content);
-            }
+            //var test = new StreamReader(email).ReadToEnd();
+            var content = new StreamContent(email);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/email");
+            context.Response = await context
+                .Client
+                .PostAsync(p1, content);            
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Serko.Expense.Core.Serialization;
 using Serko.Expense.Server.Dtos;
 using Xunit;
@@ -9,12 +11,12 @@ namespace Serko.Expense.Tests
     public class EmailXmlTextReaderTests
     {
         [Fact]
-        public void Read_TagWithValue_CorrectXmlReturned()
+        public async Task Read_TagWithValue_CorrectXmlReturned()
         {
             //arrange
             var buffer = new char[100];
             var reader = new StringReader("<test>text</test>");
-            var lexer = new EmailXmlLexer(reader);
+            var lexer = await new EmailXmlLexer(reader).ToArrayAsync();
             var textReader = new EmailXmlTextReader(lexer, typeof(SaveReservationDto));
 
             //act
@@ -26,12 +28,12 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Read_TextAfterTagWithValue_CorrectXmlReturned()
+        public async Task Read_TextAfterTagWithValue_CorrectXmlReturned()
         {
             //arrange
             var buffer = new char[100];
             var reader = new StringReader("<test>text</test>asd");
-            var lexer = new EmailXmlLexer(reader);
+            var lexer = await new EmailXmlLexer(reader).ToArrayAsync();
             var textReader = new EmailXmlTextReader(lexer, typeof(SaveReservationDto));
 
             //act
@@ -43,12 +45,12 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Read_TextBeforeTagWithValue_CorrectXmlReturned()
+        public async Task Read_TextBeforeTagWithValue_CorrectXmlReturned()
         {
             //arrange
             var buffer = new char[100];
             var reader = new StringReader("asd<test>text</test>");
-            var lexer = new EmailXmlLexer(reader);
+            var lexer = await new EmailXmlLexer(reader).ToArrayAsync();
             var textReader = new EmailXmlTextReader(lexer, typeof(SaveReservationDto));
 
             //act
@@ -60,12 +62,12 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Read_TextBeforeAndAfterTagWithValue_CorrectXmlReturned()
+        public async Task Read_TextBeforeAndAfterTagWithValue_CorrectXmlReturned()
         {
             //arrange
             var buffer = new char[100];
             var reader = new StringReader("asd<test>text</test>asd");
-            var lexer = new EmailXmlLexer(reader);
+            var lexer = await new EmailXmlLexer(reader).ToArrayAsync();
             var textReader = new EmailXmlTextReader(lexer, typeof(SaveReservationDto));
 
             //act
@@ -77,12 +79,12 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Read_TextBeforeAndAfterWithNestedTagWithValue_CorrectXmlReturned()
+        public async Task Read_TextBeforeAndAfterWithNestedTagWithValue_CorrectXmlReturned()
         {
             //arrange
             var buffer = new char[100];
             var reader = new StringReader("asd<test><inner>text</inner></test>asd");
-            var lexer = new EmailXmlLexer(reader);
+            var lexer = await new EmailXmlLexer(reader).ToArrayAsync();
             var textReader = new EmailXmlTextReader(lexer, typeof(SaveReservationDto));
 
             //act
@@ -94,12 +96,12 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Read_EmailFieldWithTagWithValue_CorrectXmlReturned()
+        public async Task Read_EmailFieldWithTagWithValue_CorrectXmlReturned()
         {
             //arrange
             var buffer = new char[100];
             var reader = new StringReader("To: Antoine Lloyd <Antoine.Lloyd@example.com>\r\nasd<test>text</test>asd");
-            var lexer = new EmailXmlLexer(reader);
+            var lexer = await new EmailXmlLexer(reader).ToArrayAsync();
             var textReader = new EmailXmlTextReader(lexer, typeof(SaveReservationDto));
 
             //act
@@ -111,13 +113,13 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Read_BufferIsCorrectlyRolled_CorrectXmlReturned()
+        public async Task Read_BufferIsCorrectlyRolled_CorrectXmlReturned()
         {
             //arrange
             var buffer = new char[5];
             var output = new StringBuilder();
             var reader = new StringReader("asd<test><inner>text</inner></test>asd");
-            var lexer = new EmailXmlLexer(reader);
+            var lexer = await new EmailXmlLexer(reader).ToArrayAsync();
             var textReader = new EmailXmlTextReader(lexer, typeof(SaveReservationDto));
 
             //act
@@ -135,12 +137,12 @@ namespace Serko.Expense.Tests
         }
 
         [Fact]
-        public void Read_EmailFieldWithAndTextWithColonTagWithValue_CorrectXmlReturned()
+        public async Task Read_EmailFieldWithAndTextWithColonTagWithValue_CorrectXmlReturned()
         {
             //arrange
             var buffer = new char[100];
             var reader = new StringReader("To: Antoine Lloyd <Antoine.Lloyd@example.com>\r\nasd: <test>text</test>asd");
-            var lexer = new EmailXmlLexer(reader);
+            var lexer = await new EmailXmlLexer(reader).ToArrayAsync();
             var textReader = new EmailXmlTextReader(lexer, typeof(SaveReservationDto));
 
             //act
